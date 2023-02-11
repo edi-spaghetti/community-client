@@ -1,0 +1,58 @@
+name: Community
+
+on:
+  push:
+    branches: [main]
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # setup
+      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          repository: edi-spaghetti/community-code
+          path: OneLife
+      - name: Checkout data
+        uses: actions/checkout@v3
+        with:
+          repository: jasonrohrer/OneLifeData7
+          path: OneLifeData7
+      - name: Checkout engine
+        uses: actions/checkout@v3
+        with:
+          repository: edi-spaghetti/community-engine
+          path: minorGems
+      - name: Install dependencies
+        run: ./getDependencies.sh
+
+      # build
+      - name: Build Client
+        run: ./buildClient.sh
+      - name: Package Client
+        run: zip -9 -y -r client.zip build/
+
+      # deploy
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: First release
+      - name: Upload Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./client.zip
+          asset_name: client.zip
+          asset_content_type: application/zip

@@ -3,9 +3,9 @@ cd dependencies
 
 ## Third Party Dependencies
 sudo apt-get update
-sudo apt-get install -y wget git
+sudo apt-get install -y g++ wget git
 sudo apt-get install -y imagemagick xclip libglu1-mesa-dev libgl1-mesa-dev libsdl1.2-dev
-sudo apt-get install -y mingw-w64
+sudo apt-get install -y mingw-w64 zip
 sudo apt-get install -y build-essential
 
 # SDL
@@ -40,9 +40,3 @@ if [ ! -d l*png* ]; then
 fi
 
 cd ..
-
-## Project Files
-
-git clone git@github.com:edi-spaghetti/community-code.git OneLife
-git clone git@github.com:edi-spaghetti/community-engine.git minorGems
-git clone https://github.com/jasonrohrer/OneLifeData7.git
